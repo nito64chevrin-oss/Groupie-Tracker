@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nous Contacter - Groupi Music</title>
+    <link rel="stylesheet" href="/statics/contact-style.css">
+    <link rel="shortcut icon" type="image/png" href="/statics/image/logo_min.png"/>
+</head>
+<body>
+    <header>
+        <div class="logo-wrap" data-title="Groupi Music">
+            <img class="logo" src="/statics/image/logo-v2.png" alt="logo site">
+        </div>
+        <h1 class="site-title">Nous Contacter</h1>
+        <div class="search-placeholder"></div>
+    </header>
+
+    <main class="content-background">
+        <div class="contact-container">
+            <h2>Envoyez-nous un message</h2>
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <label for="name">Nom *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Sujet *</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Envoyer</button>
+            </form>
+            <div id="successMessage" class="success-message"></div>
+        </div>
+    </main>
+
+    <footer>
+    <div class="link">
+        <a href="index.html">Profiter de la musique</a> |
+        <a href="about_us.html">À propos de nous</a> |
+        <a href="privacy.html">Politique de confidentialité</a>
+    </div>
+    <p>&copy; 2024 Groupi Music. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

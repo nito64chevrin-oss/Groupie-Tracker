@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/statics/style.css">
+    <link rel="shortcut icon" type="image/png" href="/statics/image/logo_min.png"/>
+    <title>Groupi Music</title>
+</head>
+    <body>
+        <header>
+        <div class="logo-wrap" data-title="Groupi Music">
+            <a href="about_us.html"><img class="logo" src="/statics/image/logo-v2.png" alt="logo site"></a>
+            <h1 class="site-title">Groupi Music</h1>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="searchBox" class="search-box" placeholder="Rechercher...">
+        </div>
+        </header>
+        <main>
+            <div class="features-section" id="features">
+                <div class="img_artiste">
+                    {{range .}}
+                    <img src="{{.Artist.Image}}" alt ="Image de {{.Artist.Nom}}" class="image_grp">
+                    <p>{{.Artist.Nom}}</p>
+                    {{end}}
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="link">
+                <a href="about_us.html">À propos de nous</a> |
+                <a href="contact.html">Contact</a> |
+                <a href="privacy.html">Politique de confidentialité</a>
+            </div>
+        <p>&copy; 2024 Groupi Music. Tous droits réservés.</p>
+        </footer>        
+    </body>
+</html>
