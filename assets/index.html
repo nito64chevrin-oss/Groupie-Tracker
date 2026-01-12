@@ -10,24 +10,55 @@
     <body>
         <header>
         <div class="logo-wrap" data-title="Groupi Music">
-            <a href="about_us.html"><img class="logo" src="/statics/image/logo-v2.png" alt="logo site"></a>
+            <a href="/"><img class="logo" src="/statics/image/logo-v2.png" alt="logo site"></a>
             <h1 class="site-title">Groupi Music</h1>
         </div>
         
-        <div class="search-container">
-            <input type="text" id="searchBox" class="search-box" placeholder="Rechercher...">
-        </div>
+        <form class="search-container" method="GET" action="/">
+            <input type="text" name="search" id="searchBox" class="search-box" placeholder="Rechercher...">
+        </form>
         </header>
         <main>
             <div class="features-section" id="features">
                 <div class="img_artiste">
                     {{range .}}
-                    <img src="{{.Artist.Image}}" alt ="Image de {{.Artist.Nom}}" class="image_grp">
-                    <p>{{.Artist.Nom}}</p>
+                    <div class="artist-card" data-artist='{"id":{{.Artist.ID}},"name":"{{.Artist.Nom}}","image":"{{.Artist.Image}}","members":{{.Artist.Membres}},"creationDate":{{.Artist.DateCreation}},"firstAlbum":"{{.Artist.FirstAlbum}}","locations":"{{.Locations.Locations}}","dates":"{{.ConcertDates.Dates}}"}'>
+                        <img src="{{.Artist.Image}}" alt="Image de {{.Artist.Nom}}" class="image_grp">
+                        <p>{{.Artist.Nom}}</p>
+                    </div>
                     {{end}}
                 </div>
             </div>
         </main>
+
+        <!-- Modal pour afficher les détails de l'artiste -->
+        <div id="artistModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Artist" class="modal-image">
+                    <h2 id="modalName"></h2>
+                    <div class="modal-info">
+                        <div class="info-section">
+                            <h3>Membres</h3>
+                            <p id="modalMembers"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Date de création</h3>
+                            <p id="modalCreation"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Premier album</h3>
+                            <p id="modalAlbum"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Lieux de tournée</h3>
+                            <p id="modalLocations"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <footer>
             <div class="link">
                 <a href="about_us.html">À propos de nous</a> |
@@ -35,6 +66,61 @@
                 <a href="privacy.html">Politique de confidentialité</a>
             </div>
         <p>&copy; 2024 Groupi Music. Tous droits réservés.</p>
-        </footer>        
+        </footer>
+        
+        <script>
+            const modal = document.getElementById('artistModal');
+            const closeBtn = document.querySelector('.close');
+            const artistCards = document.querySelectorAll('.artist-card');
+
+            // Ouvrir la modal au clic sur une carte
+            artistCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const data = JSON.parse(card.getAttribute('data-artist'));
+                    
+                    document.getElementById('modalImage').src = data.image;
+                    document.getElementById('modalName').textContent = data.name;
+                    document.getElementById('modalCreation').textContent = data.creationDate;
+                    document.getElementById('modalAlbum').textContent = data.firstAlbum;
+                    document.getElementById('modalMembers').textContent = data.members.join(', ');
+                    
+                    const locations = data.locations;
+                    const locationsText = typeof locations === 'string' ? locations : JSON.stringify(locations);
+                    document.getElementById('modalLocations').textContent = locationsText;
+                    
+                    modal.style.display = 'block';
+                });
+            });
+
+            // Fermer la modal au clic sur X
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // Fermer la modal au clic en dehors
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Intersection Observer pour l'effet de fondu
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const img = entry.target.querySelector('.image_grp');
+                    if (entry.isIntersecting) {
+                        img.classList.add('visible');
+                        img.classList.remove('hidden');
+                    } else {
+                        img.classList.add('hidden');
+                        img.classList.remove('visible');
+                    }
+                });
+            }, { threshold: 0.3, rootMargin: '0px' });
+
+            artistCards.forEach(card => {
+                observer.observe(card);
+            });
+        </script>
     </body>
 </html>
