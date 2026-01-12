@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -215,8 +216,47 @@ func PageMusicHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Create a custom template with functions
+	funcMap := template.FuncMap{
+		"formatLocation": func(location string) string {
+			return strings.ReplaceAll(location, "-", ", ")
+		},
+		"formatDate": func(dateStr string) string {
+			parts := strings.Split(dateStr, "-")
+			if len(parts) == 3 {
+				return fmt.Sprintf("%s/%s/%s", parts[2], parts[1], parts[0])
+			}
+			return dateStr
+		},
+		"getLocationName": func(location string) string {
+			parts := strings.Split(location, "-")
+			if len(parts) > 0 {
+				return parts[len(parts)-1]
+			}
+			return location
+		},
+		"sliceYear": func(date string) string {
+			parts := strings.Split(date, "-")
+			if len(parts) >= 1 {
+				return parts[0]
+			}
+			return date
+		},
+		"getInitials": func(name string) string {
+			if len(name) > 0 {
+				return string(name[0])
+			}
+			return "?"
+		},
+	}
+
 	// Render the artist page
-	tmpl := template.Must(template.ParseFiles("./assets/page_artiste.html"))
+	tmpl, err := template.New("page_artiste.html").Funcs(funcMap).ParseFiles("./assets/page_artiste.html")
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement du template", http.StatusInternalServerError)
+		return
+	}
+
 	if err := tmpl.Execute(w, bonID); err != nil {
 		http.Error(w, "Erreur lors de l'affichage de la page d'artiste", http.StatusInternalServerError)
 	}
