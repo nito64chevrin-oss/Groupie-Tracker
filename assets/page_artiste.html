@@ -13,6 +13,12 @@
             <a href="/"><img class="logo" src="/statics/image/logo-v2.png" alt="logo site"></a>
             <h1 class="site-title">Groupi Music</h1>
         </div>
+        
+        <form class="search-container" method="GET" action="/">
+            <input type="text" name="search" id="searchBox" class="search-box" placeholder="Rechercher un artiste ou un membre..." autocomplete="off">
+            <button type="submit" class="search-button">Rechercher</button>
+        </form>
+        
         <a href="/" class="back-link">Retour</a>
     </header>
 
@@ -34,31 +40,31 @@
             <!-- Quick Stats -->
             <div class="quick-stats">
                 <div class="stat-item">
-                    <div class="stat-icon">Date</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-content">
-                        <p class="stat-label">Créé en</p>
-                        <p class="stat-value">{{.Artist.DateCreation}}</p>
+                        <span class="stat-label">Créé en:</span>
+                        <span class="stat-value">{{.Artist.DateCreation}}</span>
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">Album</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-content">
-                        <p class="stat-label">Premier album</p>
-                        <p class="stat-value">{{.Artist.FirstAlbum}}</p>
+                        <span class="stat-label">Album:</span>
+                        <span class="stat-value">{{.Artist.FirstAlbum}}</span>
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">Concerts</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-content">
-                        <p class="stat-label">Concerts</p>
-                        <p class="stat-value">{{len .Relations.DatesLocations}}</p>
+                        <span class="stat-label">Concerts:</span>
+                        <span class="stat-value">{{len .Relations.DatesLocations}}</span>
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">Lieux</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-content">
-                        <p class="stat-label">Lieux</p>
-                        <p class="stat-value">{{len .Locations.Locations}}</p>
+                        <span class="stat-label">Lieux:</span>
+                        <span class="stat-value">{{len .Locations.Locations}}</span>
                     </div>
                 </div>
             </div>
@@ -112,7 +118,9 @@
                 </div>
                 <div class="locations-cloud">
                     {{range .Locations.Locations}}
-                    <span class="location-chip">{{. | formatLocation}}</span>
+                    <a href="{{. | googleMapsLink}}" target="_blank" class="location-chip location-link">
+                        {{. | formatLocation}}
+                    </a>
                     {{end}}
                 </div>
             </section>
@@ -125,16 +133,20 @@
                 </div>
                 <div class="concerts-timeline">
                     {{$relMap := .Relations.DatesLocations}}
-                    {{range $date, $locations := $relMap}}
+                    {{range $location, $dates := $relMap}}
                     <div class="timeline-item">
                         <div class="timeline-marker">
                             <div class="timeline-dot"></div>
                         </div>
                         <div class="timeline-content">
-                            <h4 class="concert-date-title">{{$date | formatDate}}</h4>
+                            <h4 class="concert-date-title">
+                                <a href="{{$location | googleMapsLink}}" target="_blank" class="venue-title-link">
+                                    {{$location | formatLocation}}
+                                </a>
+                            </h4>
                             <div class="concert-venues">
-                                {{range $locations}}
-                                <span class="venue-badge">{{. | formatLocation}}</span>
+                                {{range $dates}}
+                                <span class="venue-badge">{{. | formatDate}}</span>
                                 {{end}}
                             </div>
                         </div>

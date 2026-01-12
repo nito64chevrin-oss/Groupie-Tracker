@@ -221,6 +221,12 @@ func PageMusicHandler(w http.ResponseWriter, r *http.Request) {
 		"formatLocation": func(location string) string {
 			return strings.ReplaceAll(location, "-", ", ")
 		},
+		"googleMapsLink": func(location string) string {
+			// Format: "city-country" -> encode for Google Maps search
+			formatted := strings.ReplaceAll(location, "-", ", ")
+			encoded := strings.ReplaceAll(formatted, " ", "+")
+			return fmt.Sprintf("https://www.google.com/maps/search/%s", encoded)
+		},
 		"formatDate": func(dateStr string) string {
 			parts := strings.Split(dateStr, "-")
 			if len(parts) == 3 {
